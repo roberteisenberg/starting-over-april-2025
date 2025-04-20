@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dapr-test
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dapr-test
+  template:
+    metadata:
+      labels:
+        app: dapr-test
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "dapr-test"
+        dapr.io/app-port: "80"
+        dapr.io/app-protocol: "http"
+        dapr.io/metrics-enabled: "true"
+    spec:
+      containers:
+      - name: app
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dapr-test
+  namespace: default
+spec:
+  selector:
+    app: dapr-test
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
