@@ -1,0 +1,45 @@
+{{- if .Values.orderfrontendapp.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-orderfrontendapp
+  labels:
+    app: {{ .Release.Name }}-orderfrontendapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-orderfrontendapp
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-orderfrontendapp
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "orderfrontendapp"
+        dapr.io/app-port: "80"
+        dapr.io/app-protocol: "http"
+        dapr.io/metrics-enabled: "true"
+    spec:
+      containers:
+      - name: orderfrontendapp
+        image: reisenberg123/dapr-traffic-control-order-frontend:1.0
+        ports:
+        - containerPort: 80
+        env:
+        - name: APP_PORT
+          value: "80"
+        - name: DAPR_HTTP_PORT
+          value: "3500"
+        - name: DAPR_GRPC_PORT
+          value: "50001"
+        - name: APP_PROTOCOL
+          value: "http"
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+{{- end }}

@@ -1,0 +1,10 @@
+backend:
+  enabled: true
+  service:
+    port: 8080  # Adjust this port based on your backend service
+  serviceAccount:
+    create: true  # From the previous fix
+orderfrontendapp:
+  enabled: false
+pythonSubscriber:
+  enabled: false
