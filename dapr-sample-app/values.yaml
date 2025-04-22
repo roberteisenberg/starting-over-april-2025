@@ -1,10 +1,12 @@
 backend:
   enabled: true
-  service:
-    port: 8080  # Adjust this port based on your backend service
   serviceAccount:
-    create: true  # From the previous fix
+    create: true
 orderfrontendapp:
   enabled: false
 pythonSubscriber:
   enabled: false
+service:
+  enabled: true  # Enable the service
+  port: 8080     # The port the service exposes
+  targetPort: 8080  # Maps to the backend containerPort
